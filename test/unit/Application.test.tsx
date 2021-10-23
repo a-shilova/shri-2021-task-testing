@@ -1,12 +1,13 @@
-import {BrowserRouter} from "react-router-dom";
+import {BrowserRouter, Router} from "react-router-dom";
 import {Provider} from "react-redux";
 import {Application} from "../../src/client/Application";
-import React, {FC} from "react";
+import React, {ReactElement} from "react";
 import {render, screen} from "@testing-library/react";
 import {CartApiMock} from "./mocks/CartApiMock";
 import {ExampleApiMock} from "./mocks/ExampleApiMock"
 import {initStore} from "../../src/client/store";
 import {Store} from "redux";
+import {createMemoryHistory} from 'history'
 
 const basename = '/hw/store';
 
@@ -14,7 +15,7 @@ describe('Application', () => {
     let baseApi: ExampleApiMock;
     let cardApi: CartApiMock;
     let store: Store;
-    let application: FC;
+    let application: ReactElement;
 
     beforeEach(() => {
         baseApi = new ExampleApiMock(basename);
@@ -38,7 +39,7 @@ describe('Application', () => {
 
     it('should render Application', () => {
         const {container} = render(application);
-        expect(container.firstChild.className).toEqual('Application');
+        expect(container.getElementsByClassName('Application')).toHaveProperty('length', 1)
     });
 
     it('should render Home', () => {
@@ -84,9 +85,79 @@ describe('Application', () => {
 
         it('should has link on main page', () => {
             const {getByRole} = render(application);
-            expect(screen.getByRole('link', {
+            expect(getByRole('link', {
                 name: /example store/i
             })).toBeTruthy();
+        });
+    });
+
+    describe('Router', () => {
+        it('should render Contacts by link', () => {
+            const history = createMemoryHistory()
+            const route = '/contacts'
+            history.push(route);
+
+            const {getByRole} = render(
+                <Router history={history}>
+                    <Provider store={store}>
+                        <Application/>
+                    </Provider>
+                </Router>
+            );
+            expect(getByRole('heading', {
+                name: /contacts/i
+            })).toBeTruthy();
+        });
+
+        it('should render Delivery by link', () => {
+            const history = createMemoryHistory()
+            const route = '/delivery'
+            history.push(route);
+
+            const {getByRole} = render(
+                <Router history={history}>
+                    <Provider store={store}>
+                        <Application/>
+                    </Provider>
+                </Router>
+            );
+            expect(getByRole('heading', {
+                name: /delivery/i
+            })).toBeTruthy();
+        });
+
+        it('should render Catalog by link', () => {
+            const history = createMemoryHistory()
+            const route = '/catalog'
+            history.push(route);
+
+            const {getByRole} = render(
+                <Router history={history}>
+                    <Provider store={store}>
+                        <Application/>
+                    </Provider>
+                </Router>
+            );
+
+            expect(getByRole('heading', {
+                name: /catalog/i
+            })).toBeTruthy();
+        });
+
+        it('should render Catalog by link', () => {
+            const history = createMemoryHistory()
+            const route = '/catalog/2'
+            history.push(route);
+
+            const {container} = render(
+                <Router history={history}>
+                    <Provider store={store}>
+                        <Application/>
+                    </Provider>
+                </Router>
+            );
+
+            expect(container.getElementsByClassName('Product')).toHaveProperty('length', 1);
         });
     });
 })
