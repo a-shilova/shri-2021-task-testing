@@ -1,13 +1,10 @@
 const { assert } = require('chai');
 
-describe('github', async function() {
-    it('Тест, который пройдет', async function() {
-        await this.browser.url('https://github.com/gemini-testing/hermione');
-        await this.browser.assertView('plain', '#readme', {
-            compositeImage: true,
-        });
+describe('start page', async function() {
+    it('should has title', async function() {
+        await this.browser.url('/hw/store/');
 
-        const title = await this.browser.$('#readme h1').getText();
-        assert.equal(title, 'Hermione');
+        const title = await this.browser.$('.display-3').getText();
+        assert.equal(title, 'Welcome to Example store!');
     });
 });
