@@ -1,6 +1,6 @@
 const { assert } = require('chai');
 
-describe('start page', async function() {
+describe('start page', function() {
     it('should has title', async function() {
         await this.browser.url('/hw/store/');
 
