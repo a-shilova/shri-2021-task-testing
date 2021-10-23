@@ -8,6 +8,7 @@ import {ExampleApiMock} from "./mocks/ExampleApiMock"
 import {initStore} from "../../src/client/store";
 import {Store} from "redux";
 import {createMemoryHistory} from 'history'
+import {ExampleApi} from "../../src/client/api";
 
 const basename = '/hw/store';
 
@@ -20,7 +21,7 @@ describe('Application', () => {
   beforeEach(() => {
     baseApi = new ExampleApiMock(basename);
     cardApi = new CartApiMock();
-    store = initStore(baseApi, cardApi);
+    store = initStore(baseApi as unknown as ExampleApi, cardApi);
     application = (
       <BrowserRouter basename={basename}>
         <Provider store={store}>
