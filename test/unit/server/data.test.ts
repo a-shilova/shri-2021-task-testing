@@ -1,8 +1,5 @@
 import {ExampleStore} from "../../../src/server/data";
 import {Order, Product} from '../../../src/common/types';
-import {commerce} from "faker";
-
-const PRODUCT_SIZE = 5;
 
 const generateProducts = (count: number) => {
     const products: Product[] = []
@@ -10,19 +7,21 @@ const generateProducts = (count: number) => {
     for (let id = 0; id < count; id++) {
         products.push({
             id,
-            name: `${commerce.productAdjective()} ${commerce.product()}`,
-            description: commerce.productDescription(),
-            price: Number(commerce.price()),
-            color: commerce.color(),
-            material: commerce.productMaterial(),
+            name: 'name',
+            description: 'description',
+            price: 500,
+            color: '#F00F00',
+            material: 'material',
         });
     }
 
     return products;
 }
 
+const PRODUCT_SIZE = 5;
 const productList: Product[] = generateProducts(PRODUCT_SIZE);
 
+// @ts-ignore
 class ExampleStoreTest extends ExampleStore {
     private readonly products: Product[] = productList;
     private readonly orders: (Order | { id: number })[] = [];
@@ -40,8 +39,8 @@ describe('ExampleStore', () => {
     })
 
     describe('getAllProducts', () => {
-        it('should return all product from Store', () => {
-            expect(store.getAllProducts().length).toEqual(PRODUCT_SIZE);
+        it('should return products with size equal mocks', () => {
+            expect(store.getAllProducts().length).toEqual(productList.length);
         });
     });
 
