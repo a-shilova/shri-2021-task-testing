@@ -1,5 +1,5 @@
 module.exports = {
-    baseUrl: 'http://localhost:3000/',
+    baseUrl: 'https://shri.yandex/',
     gridUrl: 'http://172.18.0.1:4444',
 
     browsers: {
