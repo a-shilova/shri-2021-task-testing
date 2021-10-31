@@ -35,3 +35,11 @@ jobs:
         run: |
             echo $RELEASE_VERSION
             echo ${{ env.RELEASE_VERSION }}
+
+      # Write commits
+      - name: Show last commit
+        run: |
+            echo Release version $RELEASE_VERSION >> changelog.md
+            echo "" >> changelog.md
+            git log $RELEASE_VERSION..HEAD --oneline >> changelog.md
+
