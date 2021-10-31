@@ -40,6 +40,3 @@ jobs:
       - name: Show last commit
         run: |
             echo Release version $RELEASE_VERSION >> changelog.md
-            echo "" >> changelog.md
-            git log $RELEASE_VERSION..HEAD --oneline >> changelog.md
-
