@@ -28,8 +28,15 @@ jobs:
       - name: Run a one-line script
         run: echo Hello, world!
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      # Save latest release tag
+      - name: Get release tag
+        id: tag
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
+      # Write latest release tag
+      - name: Check output
+          env:
+              RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+          run: |
+              echo $RELEASE_VERSION
+              echo ${{ steps.vars.outputs.tag }}
