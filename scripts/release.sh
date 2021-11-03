@@ -24,8 +24,8 @@ fi
 
 CHANGELOG=$(git log "$RELEASE_VERSION".."$PREV_VERSION" --oneline)
 
-TAGGER=$(git show v1.0 | grep "Tagger:")
-TAG_DATE=$(git show v1.0 | grep "Date" | sort | tail -n 1)
+TAGGER=$(git show "$RELEASE_VERSION" | grep "Tagger:")
+TAG_DATE=$(git show "$RELEASE_VERSION" | grep "Date" | sort | tail -n 1)
 
 echo "$TAGGER"
 echo "$DATE"

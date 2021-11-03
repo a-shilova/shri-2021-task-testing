@@ -38,7 +38,6 @@ jobs:
       # Write commits
       - name: Run script of release
         run: |
-            npm i
             sh ./scripts/release.sh
         env:
             YANDEX_AUTH_TOKEN: ${{ secrets.YANDEX_AUTH_TOKEN }}
