@@ -7,7 +7,7 @@ on:
   # Triggers the workflow on push tags but only for the master branch
   push:
     tags:
-      - v1.*
+      - v*
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -34,9 +34,15 @@ jobs:
       - name: Test
         run: |
             echo $RELEASE_VERSION
-            echo ${{ env.RELEASE_VERSION }}
 
       # Write commits
-      - name: Show last commit
+      - name: Run script of release
         run: |
-            echo Release version $RELEASE_VERSION >> changelog.md
+            npm i
+            sh ./scripts/release.sh
+        env:
+            YANDEX_AUTH_TOKEN: ${{ secrets.YANDEX_AUTH_TOKEN }}
+            YANDEX_ORG_ID: ${{ secrets.YANDEX_ORG_ID }}
+            GITHUB_SERVER_URL: ${{ github.GITHUB_SERVER_URL }}
+            GITHUB_REPOSITORY: ${{ github.GITHUB_REPOSITORY }}
+            GITHUB_RUN_ID: ${{ github.GITHUB_RUN_ID }}
