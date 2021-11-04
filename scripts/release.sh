@@ -6,7 +6,7 @@ echo "GitHub ссылка: $GITHUB_ACTIONS_URL"
 
 # get tag list
 
-TAG_LIST=$(git tag --sort=-taggerdate | grep -E "^v*" | head -2)
+TAG_LIST=$(git tag --sort=-taggerdate | grep -E "^v*" | tail -2)
 
 if [ -z "$RELEASE_VERSION" ]
 then
@@ -32,8 +32,8 @@ echo "$TAG_DATE"
 echo "Changelog"
 echo "$CHANGELOG"
 
-YANDEX_AUTH_TOKEN="AQAAAAA-9a7zAAd5KV4boMhCLkkVhRQuHR4UPmU"
-YANDEX_ORG_ID="6461097"
+#YANDEX_AUTH_TOKEN="AQAAAAA-9a7zAAd5KV4boMhCLkkVhRQuHR4UPmU"
+#YANDEX_ORG_ID="6461097"
 
 export CURL_OAUTH="Authorization: OAuth ${YANDEX_AUTH_TOKEN}"
 export CURL_ORG="X-Org-Id: ${YANDEX_ORG_ID}"

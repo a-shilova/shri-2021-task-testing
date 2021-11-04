@@ -1,6 +1,6 @@
 node_modules
 dist
 NOTES.md
-Dockerfile
+.github/workflows/Dockerfile
 .dockerignore
 .hermione.conf.js
