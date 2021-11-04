@@ -67,14 +67,12 @@ NEW_TASK_RESPONSE="$(curl \
 --data "${CURL_CREATE_PARAMS}" \
 "$CURL_HOST"/v2/issues/)"
 
-echo $NEW_TASK_RESPONSE
-
 mapfile -t NEW_TASK_ARR <<< "$NEW_TASK_RESPONSE"
 
 NEW_TASK_CODE=${NEW_TASK_ARR[-1]} # get last element (last line)
 
 NEW_TASK_BODY=${NEW_TASK_ARR[*]::${#NEW_TASK_ARR[*]}-1} # get all elements except last
-TASK_ID=$(echo $NEW_TASK_BODY | jq '.id')
+TASK_ID=$(echo "$NEW_TASK_BODY" | jq '.id')
 export TASK_ID
 
 if [ "$NEW_TASK_CODE" = 201 ]
