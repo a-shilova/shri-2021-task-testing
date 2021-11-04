@@ -32,12 +32,12 @@ echo "$TAG_DATE"
 echo "Changelog"
 echo "$CHANGELOG"
 
-YANDEX_AUTH_TOKEN="AQAAAAA-9a7zAAd5KV4boMhCLkkVhRQuHR4UPmU"
-YANDEX_ORG_ID="6461097"
+#YANDEX_AUTH_TOKEN="AQAAAAA-9a7zAAd5KV4boMhCLkkVhRQuHR4UPmU"
+#YANDEX_ORG_ID="6461097"
 
-CURL_OAUTH="Authorization: OAuth ${YANDEX_AUTH_TOKEN}"
-CURL_ORG="X-Org-Id: ${YANDEX_ORG_ID}"
-CURL_HOST='https://api.tracker.yandex.net'
+export CURL_OAUTH="Authorization: OAuth ${YANDEX_AUTH_TOKEN}"
+export CURL_ORG="X-Org-Id: ${YANDEX_ORG_ID}"
+export CURL_HOST='https://api.tracker.yandex.net'
 
 DESC_CHANGELOG=$(echo "$CHANGELOG" | awk '{printf "%s\\n", $0}' | sed 's/"/\\"/g')
 
@@ -58,14 +58,20 @@ CURL_CREATE_PARAMS="{\
 
 echo 'Создаем новую задачу для релиза...'
 
-NEW_TASK_CODE="$(curl \
--s -o /dev/null -w "%{http_code}" \
+NEW_TASK_RESPONSE="$(curl \
+-s -w "\n%{http_code}" \
 -X 'POST' \
 -H "$CURL_OAUTH"  \
 -H "$CURL_ORG"  \
 -H 'Content-Type: application/json' \
 --data "${CURL_CREATE_PARAMS}" \
 "$CURL_HOST"/v2/issues/)"
+
+NEW_TASK_ARR=(${NEW_TASK_RESPONSE[@]}) # convert to array
+NEW_TASK_CODE=${NEW_TASK_ARR[-1]} # get last element (last line)
+
+NEW_TASK_BODY=${NEW_TASK_ARR[@]::${#NEW_TASK_ARR[@]}-1} # get all elements except last
+export TASK_ID=$(echo $NEW_TASK_BODY | jq '.id')
 
 if [ "$NEW_TASK_CODE" = 201 ]
 then
@@ -107,7 +113,6 @@ then
 		   --data "${CURL_CREATE_PARAMS}" \
 		  "$CURL_HOST"/v2/issues/"$CURL_TASK_ID")"
 
-
 		if [ "$UPDATE_TASK_CODE" != 200 ]
 		then
 			echo "Запрос на обновление выполнен с ошибкой: ${UPDATE_TASK_CODE}"
@@ -116,7 +121,9 @@ then
 		fi
 	else
 		echo "Задача для обновления не найдена!"
+		exit 1
 	fi
 else
 	echo "Запрос на создание задачи выполнен с ошибкой ${NEW_TASK_CODE}"
+	exit 1
 fi
