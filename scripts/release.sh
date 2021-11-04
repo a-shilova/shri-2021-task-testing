@@ -6,7 +6,7 @@ echo "GitHub ссылка: $GITHUB_ACTIONS_URL"
 
 # get tag list
 
-TAG_LIST=$(git tag --sort=-taggerdate | grep -E "^v*" | tail -2)
+TAG_LIST=$(git tag --sort=-taggerdate | grep -E "^v*" | head -2)
 
 if [ -z "$RELEASE_VERSION" ]
 then
@@ -32,8 +32,8 @@ echo "$TAG_DATE"
 echo "Changelog"
 echo "$CHANGELOG"
 
-#YANDEX_AUTH_TOKEN="AQAAAAA-9a7zAAd5KV4boMhCLkkVhRQuHR4UPmU"
-#YANDEX_ORG_ID="6461097"
+YANDEX_AUTH_TOKEN="AQAAAAA-9a7zAAd5KV4boMhCLkkVhRQuHR4UPmU"
+YANDEX_ORG_ID="6461097"
 
 export CURL_OAUTH="Authorization: OAuth ${YANDEX_AUTH_TOKEN}"
 export CURL_ORG="X-Org-Id: ${YANDEX_ORG_ID}"
@@ -67,11 +67,12 @@ NEW_TASK_RESPONSE="$(curl \
 --data "${CURL_CREATE_PARAMS}" \
 "$CURL_HOST"/v2/issues/)"
 
-NEW_TASK_ARR=(${NEW_TASK_RESPONSE[@]}) # convert to array
+NEW_TASK_ARR=(${NEW_TASK_RESPONSE[*]}) # convert to array
 NEW_TASK_CODE=${NEW_TASK_ARR[-1]} # get last element (last line)
 
-NEW_TASK_BODY=${NEW_TASK_ARR[@]::${#NEW_TASK_ARR[@]}-1} # get all elements except last
-export TASK_ID=$(echo $NEW_TASK_BODY | jq '.id')
+NEW_TASK_BODY=${NEW_TASK_ARR[*]::${#NEW_TASK_ARR[*]}-1} # get all elements except last
+TASK_ID=$(echo $NEW_TASK_BODY | jq '.id')
+export TASK_ID
 
 if [ "$NEW_TASK_CODE" = 201 ]
 then
