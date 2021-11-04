@@ -39,7 +39,7 @@ jobs:
       # Write commits
       - name: Run script of release
         run: |
-            ./scripts/release.sh
+            bash ./scripts/release.sh
         env:
             YANDEX_AUTH_TOKEN: ${{ secrets.YANDEX_AUTH_TOKEN }}
             YANDEX_ORG_ID: ${{ secrets.YANDEX_ORG_ID }}
@@ -50,7 +50,7 @@ jobs:
       # Build
       - name: Build and update task
         run: |
-            ./scripts/build.sh
+            bash ./scripts/build.sh
         env:
             YANDEX_AUTH_TOKEN: ${{ secrets.YANDEX_AUTH_TOKEN }}
             YANDEX_ORG_ID: ${{ secrets.YANDEX_ORG_ID }}
