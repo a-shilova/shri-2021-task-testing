@@ -32,9 +32,9 @@ echo "$TAG_DATE"
 echo "Changelog"
 echo "$CHANGELOG"
 
-export CURL_OAUTH="Authorization: OAuth ${YANDEX_AUTH_TOKEN}"
-export CURL_ORG="X-Org-Id: ${YANDEX_ORG_ID}"
-export CURL_HOST='https://api.tracker.yandex.net'
+CURL_OAUTH="Authorization: OAuth ${YANDEX_AUTH_TOKEN}"
+CURL_ORG="X-Org-Id: ${YANDEX_ORG_ID}"
+CURL_HOST='https://api.tracker.yandex.net'
 
 DESC_CHANGELOG=$(echo "$CHANGELOG" | awk '{printf "%s\\n", $0}' | sed 's/"/\\"/g')
 
@@ -69,7 +69,7 @@ mapfile -t NEW_TASK_ARR <<< "$NEW_TASK_RESPONSE"
 NEW_TASK_CODE=${NEW_TASK_ARR[-1]} # get last element (last line)
 
 NEW_TASK_BODY=${NEW_TASK_ARR[*]::${#NEW_TASK_ARR[*]}-1} # get all elements except last
-export TASK_ID=$(echo "$NEW_TASK_BODY" | jq '.id')
+TASK_ID=$(echo "$NEW_TASK_BODY" | jq '.id')
 
 if [ "$NEW_TASK_CODE" = 201 ]
 then
@@ -94,7 +94,6 @@ then
 	   -H 'Content-Type: application/json' \
 	   --data "${CURL_FIND_PARAMS}" \
 	  "$CURL_HOST"/v2/issues/_search | jq ".[].id")
-	echo "$TASK_ID"
 
 	if [ -n "$TASK_ID" ]
 	then
