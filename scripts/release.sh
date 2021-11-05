@@ -32,9 +32,6 @@ echo "$TAG_DATE"
 echo "Changelog"
 echo "$CHANGELOG"
 
-#YANDEX_AUTH_TOKEN="AQAAAAA-9a7zAAd5KV4boMhCLkkVhRQuHR4UPmU"
-#YANDEX_ORG_ID="6461097"
-
 export CURL_OAUTH="Authorization: OAuth ${YANDEX_AUTH_TOKEN}"
 export CURL_ORG="X-Org-Id: ${YANDEX_ORG_ID}"
 export CURL_HOST='https://api.tracker.yandex.net'

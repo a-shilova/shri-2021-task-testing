@@ -1,27 +1,27 @@
 #!/bin/bash
 
-docker build -t anshilova/shri-2021-task-testing:${RELEASE_VERSION} .
+#docker build -t anshilova/shri-2021-task-testing:${RELEASE_VERSION} .
 
 IS_ERROR=0
 
-if [ $? != 0 ]
-then
-	IS_ERROR=1
-fi
-
-DOCKER_IMAGE_ID=$(docker images | grep shri-2021-task-testing | awk '{ print $3 }')
-
-if [ -z $DOCKER_IMAGE_ID ]
-then
-	IS_ERROR=1
-fi
-
-docker push anshilova/shri-2021-task-testing:${RELEASE_VERSION}
-
-if [ $? != 0 ]
-then
-	IS_ERROR=1
-fi
+#if [ $? != 0 ]
+#then
+#	IS_ERROR=1
+#fi
+#
+#DOCKER_IMAGE_ID=$(docker images | grep shri-2021-task-testing | awk '{ print $3 }')
+#
+#if [ -z $DOCKER_IMAGE_ID ]
+#then
+#	IS_ERROR=1
+#fi
+#
+#docker push anshilova/shri-2021-task-testing:${RELEASE_VERSION}
+#
+#if [ $? != 0 ]
+#then
+#	IS_ERROR=1
+#fi
 
 if [ IS_ERROR = 0 ]
 then
