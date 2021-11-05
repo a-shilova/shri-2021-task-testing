@@ -18,11 +18,6 @@ fi
 
 docker push anshilova/shri-2021-task-testing:${RELEASE_VERSION}
 
-if [ $? != 0 ]
-then
-	IS_ERROR="1"
-fi
-
 if [ IS_ERROR = "0" ]
 then
 	COMMENT='Релиз успешно собран и опубликован\nhttps://hub.docker.com/r/anshilova/shri-2021-task-testing/tags'
