@@ -36,8 +36,8 @@ echo "$COMMENT"
 
 echo "Добавляем комментарий о сборке релиза в задачу..."
 
-echo CURL_HOST
-echo TASK_ID
+echo "$CURL_HOST"
+echo "$TASK_ID"
 
 #COMMENT_TASK_CODE=$(curl \
 #    -sS \
