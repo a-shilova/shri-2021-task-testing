@@ -16,7 +16,7 @@ then
 	IS_ERROR=1
 fi
 
-docker push anshilova/shri-2021-task-testing:${LATEST_TAG}
+docker push anshilova/shri-2021-task-testing:${RELEASE_VERSION}
 
 if [ $? != 0 ]
 then
@@ -36,15 +36,15 @@ echo "$COMMENT"
 
 echo "Добавляем комментарий о сборке релиза в задачу..."
 
-echo $CURL_HOST
-echo $TASK_ID
+echo CURL_HOST
+echo TASK_ID
 
-COMMENT_TASK_CODE=$(curl \
-    -sS \
-    -X 'POST' \
-    -H "$CURL_OAUTH"  \
-    -H "$CURL_ORG"  \
-    -H 'Content-Type: application/json' \
-    --data "{\"text\": \"$COMMENT\"}" \
-    ${CURL_HOST}/v2/issues/${TASK_ID}/comments)
+#COMMENT_TASK_CODE=$(curl \
+#    -sS \
+#    -X 'POST' \
+#    -H "$CURL_OAUTH"  \
+#    -H "$CURL_ORG"  \
+#    -H 'Content-Type: application/json' \
+#    --data "{\"text\": \"$COMMENT\"}" \
+#    ${CURL_HOST}/v2/issues/${TASK_ID}/comments)
 

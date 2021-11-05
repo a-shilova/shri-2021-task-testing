@@ -32,8 +32,8 @@ echo "$TAG_DATE"
 echo "Changelog"
 echo "$CHANGELOG"
 
-YANDEX_AUTH_TOKEN="AQAAAAA-9a7zAAd5KV4boMhCLkkVhRQuHR4UPmU"
-YANDEX_ORG_ID="6461097"
+#YANDEX_AUTH_TOKEN="AQAAAAA-9a7zAAd5KV4boMhCLkkVhRQuHR4UPmU"
+#YANDEX_ORG_ID="6461097"
 
 export CURL_OAUTH="Authorization: OAuth ${YANDEX_AUTH_TOKEN}"
 export CURL_ORG="X-Org-Id: ${YANDEX_ORG_ID}"
@@ -72,8 +72,7 @@ mapfile -t NEW_TASK_ARR <<< "$NEW_TASK_RESPONSE"
 NEW_TASK_CODE=${NEW_TASK_ARR[-1]} # get last element (last line)
 
 NEW_TASK_BODY=${NEW_TASK_ARR[*]::${#NEW_TASK_ARR[*]}-1} # get all elements except last
-TASK_ID=$(echo "$NEW_TASK_BODY" | jq '.id')
-export TASK_ID
+export TASK_ID=$(echo "$NEW_TASK_BODY" | jq '.id')
 
 if [ "$NEW_TASK_CODE" = 201 ]
 then
