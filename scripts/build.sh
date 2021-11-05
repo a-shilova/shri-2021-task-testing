@@ -9,10 +9,7 @@ then
 	IS_ERROR="1"
 fi
 
-DOCKER_IMAGE_ID=$(docker images | grep shri-2021-task-testing | awk '{ print $3 }')
-echo $DOCKER_IMAGE_ID
-echo $(docker images)
-echo $(docker images | grep shri-2021-task-testing)
+DOCKER_IMAGE_ID=$(docker images | grep shri-2021-task-testing )
 
 if [ -z $DOCKER_IMAGE_ID ]
 then
