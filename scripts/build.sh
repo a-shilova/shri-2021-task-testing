@@ -9,7 +9,7 @@ then
 	IS_ERROR="1"
 fi
 
-DOCKER_IMAGE_ID=$(docker images | grep shri-2021-task-testing )
+DOCKER_IMAGE_ID=$(docker images | grep $RELEASE_VERSION )
 
 if [ -z $DOCKER_IMAGE_ID ]
 then
@@ -18,7 +18,12 @@ fi
 
 docker push anshilova/shri-2021-task-testing:${RELEASE_VERSION}
 
-if [ IS_ERROR = "0" ]
+if [ $? != 0 ]
+then
+	IS_ERROR="1"
+fi
+
+if [ "$IS_ERROR" = "0" ]
 then
 	COMMENT='Релиз успешно собран и опубликован\nhttps://hub.docker.com/r/anshilova/shri-2021-task-testing/tags'
 else
