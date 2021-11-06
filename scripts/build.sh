@@ -35,8 +35,7 @@ docker image rm "${DOCKER_IMAGE_ID}"
 echo "$COMMENT"
 
 echo "Добавляем комментарий о сборке релиза в задачу..."
-YANDEX_AUTH_TOKEN="AQAAAAA-9a7zAAd5KV4boMhCLkkVhRQuHR4UPmU"
-YANDEX_ORG_ID="6461097"
+
 CURL_OAUTH="Authorization: OAuth ${YANDEX_AUTH_TOKEN}"
 CURL_ORG="X-Org-Id: ${YANDEX_ORG_ID}"
 CURL_HOST='https://api.tracker.yandex.net'

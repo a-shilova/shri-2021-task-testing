@@ -7,8 +7,7 @@ COMMENT=$(echo "$COMMENT" | awk '{printf "%s\\n", $0}' | sed 's/"/\\"/g')
 
 
 echo "Добавляем комментарий о результатах тестов релиза в задачу..."
-YANDEX_AUTH_TOKEN="AQAAAAA-9a7zAAd5KV4boMhCLkkVhRQuHR4UPmU"
-YANDEX_ORG_ID="6461097"
+
 CURL_OAUTH="Authorization: OAuth ${YANDEX_AUTH_TOKEN}"
 CURL_ORG="X-Org-Id: ${YANDEX_ORG_ID}"
 CURL_HOST='https://api.tracker.yandex.net'
