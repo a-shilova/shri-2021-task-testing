@@ -6,26 +6,26 @@ echo "GitHub ссылка: $GITHUB_ACTIONS_URL"
 
 # get tag list
 
-TAG_LIST=$(git tag --sort=-taggerdate | grep -E "^v*" | head -2)
+TAG_LIST=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort | awk '{print $4}' | grep -E "^v*" | tail -2)
 
 if [ -z "$RELEASE_VERSION" ]
 then
-	RELEASE_VERSION=$(echo $TAG_LIST | awk '{ print $1 }')
+	RELEASE_VERSION=$(echo $TAG_LIST | awk '{ print $2 }')
 fi
 
 echo "Релизная версия: ${RELEASE_VERSION}"
 
 if [ -z "$PREV_VERSION" ]
 then
-	PREV_VERSION=$(echo $TAG_LIST | awk '{ print $2 }')
+	PREV_VERSION=$(echo $TAG_LIST | awk '{ print $1 }')
 fi
 
 echo "Предыдущая версия: ${PREV_VERSION}"
 
 CHANGELOG=$(git log ${PREV_VERSION}..${RELEASE_VERSION} --pretty=format:"%h %s (%an, %ar)\n" | tr -s "\n" " ")
-
-TAGGER="$(git for-each-ref --format '%(taggername)' refs/tags/${RELEASE_VERSION})"
-TAG_DATE="$(git for-each-ref --format '%(taggerdate)' refs/tags/${RELEASE_VERSION})"
+git for-each-ref --format '%(authorname)'
+TAGGER="$(git for-each-ref --format '%(authorname)' refs/tags/${RELEASE_VERSION})"
+TAG_DATE="$(git for-each-ref --format '%(authorname)' refs/tags/${RELEASE_VERSION})"
 
 echo "$TAGGER"
 echo "$TAG_DATE"
