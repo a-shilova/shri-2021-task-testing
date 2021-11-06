@@ -24,8 +24,8 @@ echo "Предыдущая версия: ${PREV_VERSION}"
 
 CHANGELOG=$(git log ${PREV_VERSION}..${RELEASE_VERSION} --pretty=format:"%h %s (%an, %ar)\n" | tr -s "\n" " ")
 
-TAGGER="$(git for-each-ref --format '%(authorname)' refs/tags/$RELEASE_VERSION)"
-TAG_DATE="$(git for-each-ref --format '%(taggerdate)' refs/tags/$RELEASE_VERSION)"
+TAGGER="$(git show ${RELEASE_VERSION} --format="%an")"
+TAG_DATE="$(git show ${RELEASE_VERSION} --format="%ad")"
 
 echo "Autor: $TAGGER"
 echo "Date: $TAG_DATE"
