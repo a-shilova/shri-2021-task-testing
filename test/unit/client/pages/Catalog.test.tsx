@@ -1,75 +1,59 @@
-import { ExampleApiMock } from '../../mocks/ExampleApiMock';
 import { CartApiMock } from '../../mocks/CartApiMock';
 import { initStore } from '../../../../src/client/store';
 import { ExampleApi } from '../../../../src/client/api';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import React, { ReactComponentElement } from 'react';
+import React from 'react';
 import { Catalog } from '../../../../src/client/pages/Catalog';
-import { Store } from 'redux';
-import { screen } from '@testing-library/react';
+import {
+	render,
+	screen,
+	waitForElementToBeRemoved
+} from '@testing-library/react';
 import { PRODUCT_LIST } from '../../mocks/productList';
-import { render, unmountComponentAtNode } from 'react-dom';
-import { act } from 'react-dom/test-utils';
+import { ProductShortInfo } from '../../../../src/common/types';
+import { AxiosResponse } from 'axios';
 
 const basename = '/hw/store';
 
 describe('Catalog', () => {
-	let parent: HTMLElement = null;
-
-	const renderCatalog = (store: Store): ReactComponentElement<any> => {
-		return <BrowserRouter basename={basename}>
-			<Provider store={store}>
-				<Catalog />
-			</Provider>
-		</BrowserRouter>;
-	};
-
-
-	beforeEach(() => {
-		parent = document.createElement('div');
-		document.body.appendChild(parent);
-	});
-
-	afterEach(() => {
-		unmountComponentAtNode(parent);
-		parent.remove();
-		parent = null;
-	});
-
 	it('should render all from content product from api', async () => {
-		const baseApi = new ExampleApiMock(basename).withProduct();
+		const baseApi = new ExampleApi(basename);
+		baseApi.getProducts = () => Promise.resolve<AxiosResponse<ProductShortInfo[], any>>({
+			headers: {},
+			config: {},
+			status: 200,
+			statusText: 'ok',
+			data: PRODUCT_LIST
+		});
 		const cardApi = new CartApiMock();
-		const store = initStore(baseApi as unknown as ExampleApi, cardApi);
-		await act(async () => render(renderCatalog(store), parent));
+		const store = initStore(baseApi, cardApi);
+		const component =
+			<MemoryRouter>
+				<Provider store={store}>
+					<Catalog />
+				</Provider>
+			</MemoryRouter>;
 
-		expect(PRODUCT_LIST.every((product) => {
-			const item = screen.getAllByTestId(product.id)[1];
-			const price = item.querySelector('.ProductItem-Price').innerHTML;
-			const name = item.querySelector('.ProductItem-Name').innerHTML;
-			const link = item.querySelector('.ProductItem-DetailsLink').getAttribute('href');
-			return price.includes('' + product.price)
-				&& name === product.name
-				&& link === basename + '/catalog/' + product.id;
-		})).toBeTruthy();
-	});
+		const { getByText, container } = render(component);
 
-	it('should render all product from api', async () => {
-		const baseApi = new ExampleApiMock(basename).withProduct();
-		const cardApi = new CartApiMock();
-		const store = initStore(baseApi as unknown as ExampleApi, cardApi);
-		await act(async () => render(renderCatalog(store), parent));
-		const all = parent.querySelectorAll('.ProductItem');
-		expect(all).toHaveProperty('length', PRODUCT_LIST.length);
-	});
+		await waitForElementToBeRemoved(() => getByText('LOADING'));
 
-	it('should have text loading, when product loaded', async () => {
-		const baseApi = new ExampleApiMock(basename).withEmptyProduct();
-		const cardApi = new CartApiMock();
-		const store = initStore(baseApi as unknown as ExampleApi, cardApi);
+		screen.logTestingPlaygroundURL();
 
-		render(renderCatalog(store), parent);
+		const namesEls = container.querySelectorAll('.ProductItem-Name');
+		const names = Array.from(namesEls).map(el => el.textContent);
+		const testNames = PRODUCT_LIST.map(item => item.name);
+		expect(names).toEqual(testNames);
 
-		expect(screen.getByText('LOADING')).toBeTruthy();
+		const pricesEl = container.querySelectorAll('.ProductItem-Price');
+		const prices = Array.from(pricesEl).map(el => el.textContent);
+		const testPrices = PRODUCT_LIST.map(item => `$${item.price}`);
+		expect(prices).toEqual(testPrices);
+
+		const linksEl = container.querySelectorAll('.ProductItem-DetailsLink');
+		const links = Array.from(linksEl).map(link => link.getAttribute('href'));
+		const testLinks = PRODUCT_LIST.map(item => '/catalog/' + item.id);
+		expect(links).toEqual(testLinks);
 	});
 });
