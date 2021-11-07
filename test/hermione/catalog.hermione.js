@@ -1,40 +1,27 @@
+const { helper } = require('./utils/utils');
+
 describe('Catalog', () => {
-	const helper = async (browser, test, w1 = 500, h1 = 1000) => {
-		const {width, height} = await browser.getWindowSize();
-		await browser.setWindowSize(w1, h1);
-		try {
-			await test();
-		} finally {
-			await browser.setWindowSize(width, height);
-		}
+	const catalog = async (browser) => {
+		const productItem = await browser.$('.ProductItem');
+		await productItem.waitForExist();
+		await browser.assertView('plain', '.ProductItem', {
+			allowViewportOverflow: true,
+			compositeImage: true
+		});
 	}
 
 	it('should have correct ProductItem on mobile', async function() {
 		const browser = this.browser;
 		await browser.url('/hw/store/catalog');
-		const test = async () => {
-			const productItem = await browser.$('.ProductItem');
-			await productItem.waitForExist();
-			await browser.assertView('plain', '.ProductItem', {
-				allowViewportOverflow: true,
-				compositeImage: true
-			});
-		}
-		await helper(this.browser, test);
+
+		await helper(this.browser, catalog);
 	});
 
 	it('should have correct ProductItem on desktop', async function() {
 		const browser = this.browser;
 		await browser.url('/hw/store/catalog');
-		const test = async () => {
-			const productItem = await browser.$('.ProductItem');
-			await productItem.waitForExist();
-			await browser.assertView('plain', '.ProductItem', {
-				allowViewportOverflow: true,
-				compositeImage: true
-			});
-		}
-		await helper(this.browser, test, 1000, 1000);
+
+		await helper(this.browser, catalog, 1000, 1000);
 	});
 
 	it('should go to Product Detains', async function() {
